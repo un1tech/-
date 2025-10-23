@@ -1,39 +1,3 @@
-import telebot
-import os
-import json
-import threading
-import time
-from datetime import datetime, timedelta
-from flask import Flask
-from telebot import types
-
-# ================== إعداد التوكن ==================
-TOKEN = os.getenv("BOT_TOKEN") or "ضع_توكن_البوت_هنا"
-bot = telebot.TeleBot(TOKEN)
-
-DATA_FILE = "data.json"
-
-# ================== دوال مساعدة ==================
-def load_data():
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r") as f:
-            return json.load(f)
-    return {}
-
-def save_data(data):
-    with open(DATA_FILE, "w") as f:
-        json.dump(data, f, indent=4)
-
-def log_study(user_id, task, duration):
-    data = load_data()
-    today = datetime.now().strftime("%Y-%m-%d")
-    if str(user_id) not in data:
-        data[str(user_id)] = {}
-    if today not in data[str(user_id)]:
-        data[str(user_id)][today] = []
-    data[str(user_id)][today].append({"task": task, "duration": duration})
-    save_data(data)
-
 # ================== بداية المحادثة ==================
 @bot.message_handler(commands=["start"])
 def start(msg):
